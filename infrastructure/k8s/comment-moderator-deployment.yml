@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comment-moderator-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comment-moderator
+  template:
+    metadata:
+      labels:
+        app: comment-moderator
+    spec:
+      containers:
+        - name: comment-moderator
+          image: iammo9/blog-comments-moderator-service

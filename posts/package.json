@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dockerize": "docker build -t iammo9/blog-posts-service . && docker push iammo9/blog-posts-service"
   },
   "keywords": [],
   "author": "",

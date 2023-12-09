@@ -24,7 +24,7 @@ app.post("/posts/:id/comments", async (req, res) => {
 
   commentsByPostId[req.params.id] = comments;
 
-  await axios.post("http://localhost:4005/events", {
+  await axios.post("http://event-bus-clusterip-service:4005/events", {
     type: "CommentCreated",
     data: {
       id: commentId,
@@ -34,12 +34,13 @@ app.post("/posts/:id/comments", async (req, res) => {
   });
 
   res.status(201).send(comments);
+  console.log("CommentCreated -> Event-Bus");
 });
 
 // app.delete("/posts/:postId/comments/:commentId", async (req, res) => {
 //   const { postId, commentId } = req.params;
 
-//   await axios.post("http://localhost:4005/events", {
+//   await axios.post("http://blog.com/events", {
 //     type: "CommentDeleted",
 //     data: {
 //       postId,
@@ -51,6 +52,7 @@ app.post("/posts/:id/comments", async (req, res) => {
 // });
 
 app.post("/events", (req, res) => {
+  console.log("Received Event", req.body.type);
   const { type, data } = req.body;
 
   // Catch commnet moderation event.
@@ -58,7 +60,7 @@ app.post("/events", (req, res) => {
     const { id, postId, content, status } = data;
 
     // Emit event.
-    axios.post("http://localhost:4005/events", {
+    axios.post("http://event-bus-clusterip-service:4005/events", {
       type: "CommentUpdated",
       data: {
         id,
@@ -67,6 +69,7 @@ app.post("/events", (req, res) => {
         status,
       },
     });
+    console.log("CommentUpdated -> Event-Bus");
   }
 
   res.send({});

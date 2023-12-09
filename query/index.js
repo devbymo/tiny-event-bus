@@ -46,6 +46,7 @@ const handleEvent = (type, data) => {
 };
 
 app.post("/events", (req, res) => {
+  console.log("Received Event", req.body.type);
   const { type, data } = req.body;
   handleEvent(type, data);
   res.send({});
@@ -55,12 +56,13 @@ app.listen(4002, () => {
   console.log("Listening on 4002");
 
   // Fetch all events from event-bus
-  axios.get("http://localhost:4005/events").then((res) => {
+  axios.get("http://event-bus-clusterip-service:4005/events").then((res) => {
     for (let event of res.data) {
       console.log("Processing event: ", event.type);
 
       // Process each event
       handleEvent(event.type, event.data);
     }
+    console.log("Events retrieved");
   });
 });

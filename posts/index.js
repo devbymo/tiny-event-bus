@@ -10,7 +10,15 @@ app.use(cors());
 
 const posts = {};
 
-app.post("/posts", async (req, res) => {
+app.get("/posts", (req, res) => {
+  res.json({
+    id: "123",
+    title: "My Post",
+    content: "My Post Content",
+  });
+});
+
+app.post("/posts/create", async (req, res) => {
   const id = randomBytes(4).toString("hex");
   const { title } = req.body;
 
@@ -19,7 +27,7 @@ app.post("/posts", async (req, res) => {
     title,
   };
 
-  await axios.post("http://localhost:4005/events", {
+  await axios.post("http://event-bus-clusterip-service:4005/events", {
     type: "PostCreated",
     data: {
       id,
@@ -28,6 +36,7 @@ app.post("/posts", async (req, res) => {
   });
 
   res.status(201).send(posts[id]);
+  console.log("PostCreated -> Event-Bus");
 });
 
 app.post("/events", (req, res) => {

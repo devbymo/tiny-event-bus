@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: comment-moderator-clusterip-service
+spec:
+  type: ClusterIP # ClusterIP is the default type of service (optional)
+  selector:
+    app: comment-moderator
+  ports:
+    - name: comment-moderator
+      protocol: TCP
+      port: 4003
+      targetPort: 4003
+      # nodePort: 31515 # optional, if not specified, k8s will assign a random port
